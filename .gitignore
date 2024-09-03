@@ -1,4 +1,6 @@
 .bsp
 .idea
-project
+project/*
+!project/build.properties
+!project/plugins.sbt
 target
