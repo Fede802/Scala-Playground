@@ -1,6 +1,11 @@
+import org.scalajs.linker.interface.ModuleSplitStyle
+import org.scalajs.sbtplugin.ScalaJSPlugin.autoImport.scalaJSUseMainModuleInitializer
+
 ThisBuild / version := "0.1.0-SNAPSHOT"
 
 ThisBuild / scalaVersion := "3.3.3"
+
+mainClass := Some("scalajs.Example")
 
 lazy val root = (project in file("."))
   .enablePlugins(ScalaJSPlugin)
@@ -18,7 +23,13 @@ lazy val root = (project in file("."))
       Seq("base", "controls", "fxml", "graphics", "media", "swing", "web")
         .map(m => "org.openjfx" % s"javafx-$m" % "21" classifier osName)
     },
+    scalaJSUseMainModuleInitializer := true,
+    scalaJSLinkerConfig ~= {
+      _.withModuleKind(ModuleKind.ESModule)
+        .withModuleSplitStyle(
+          ModuleSplitStyle.SmallModulesFor(List("scalajs")))
+    },
     libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "2.8.0",
     libraryDependencies += "com.raquo" %%% "laminar" % "17.0.0",
+
   )
-  scalaJSUseMainModuleInitializer := true
