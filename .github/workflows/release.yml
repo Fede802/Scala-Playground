@@ -38,12 +38,26 @@ jobs:
       - name: Run semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx semantic-release
+        run: |
+          output=$(npx semantic-release --debug)
+          echo "$output"
+          echo "::set-output name=release-created::$(echo "$output" | grep -q 'release created' && echo 'true' || echo 'false')"
+      - name: Check if release was created
+        if: steps.release.outputs.release-created == 'true'
+        run: echo "Release was created, continuing further steps."
+        
       - name: Build Fat JAR with sbt-assembly
+        if: steps.release.outputs.release-created == 'true'
         run: sbt assembly
+
       - name: Upload Fat JAR to GitHub Release
+        if: steps.release.outputs.release-created == 'true'
         uses: softprops/action-gh-release@v1
         with:
-          files: target/scala-2.13/my-scala-project-0.1.0-SNAPSHOT-assembly.jar
+          files: target/scala-3.3.4/ulisse.jar
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
+      - name: Handle case where no release was created
+        if: steps.release.outputs.release-created == 'false'
+        run: echo "No release created, skipping further steps."
