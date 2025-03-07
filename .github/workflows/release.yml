@@ -36,10 +36,8 @@ jobs:
       - name: Run semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          output=$(npx semantic-release --debug)
-          echo "$output"
-          echo "::set-output name=release-created::$(echo "$output" | grep -q 'release created' && echo 'true' || echo 'false')"
+        run: npx semantic-release
+      
       - name: Check if release was created
         if: steps.release.outputs.release-created == 'true'
         run: echo "Release was created, continuing further steps."
