@@ -30,5 +30,4 @@ lazy val root = (project in file("."))
       "com.tngtech.archunit"    % "archunit"          % "1.3.0"    % Test,
       "org.junit.jupiter"       % "junit-jupiter-api" % "5.10.3"   % Test
     ),
-    Global / onLoad ~= (_ andThen ("hooks" :: _))
   )
