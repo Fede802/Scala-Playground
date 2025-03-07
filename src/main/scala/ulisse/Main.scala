@@ -1,3 +1,3 @@
 object Main:
   def main(args: Array[String]): Unit =
-    println("provsa")
+    println("prova")
