@@ -20,12 +20,6 @@ jobs:
       issues: write
     runs-on: ubuntu-22.04
     steps:
-      - name: Generate a token
-        id: generate-token
-        uses: actions/create-github-app-token@v1
-        with:
-          app-id: ${{ vars.SEM_RELEASE_APPBOT_ID }}
-          private-key: ${{ secrets.SEM_RELEASE_APPBOT_KEY }}
       - name: Checkout code
         uses: actions/checkout@v4
         with:
